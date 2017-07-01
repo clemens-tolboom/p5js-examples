@@ -1,19 +1,29 @@
 var pos;
+var snakes;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  snake = new Snake();
+  snakes = new Snakes(20);
 
   init();
 }
 
 function draw() {
+  
   translate( width/2, height/2);
-  background(200);
+  background(240);
 
   strokeWeight(4);
   stroke(255, 0, 0);
-  debug( "" + pos.x + "," + pos.y);
+
   point(pos.x, pos.y);
+  
+  snakes.update();
+  snakes.draw();
+  
+  //noLoop();
 }
 
 function mousePressed() {
@@ -26,6 +36,8 @@ function init() {
   pos = createVector(width* random(-0.5, 0.5), height * random(-0.5, 0.5));
   pos.x = pos.x;
   pos.y = pos.y;
+  
+  snake.init();
 }
 
 function windowResized() {
