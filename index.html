@@ -4,18 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>P5JS scribbles</title>
+  <title>p5 * js scribbles</title>
+
+  <script language="javascript" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
+  <script language="javascript" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js"></script>
+  <script language="javascript" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.sound.min.js"></script>
+
+  <script language="javascript" type="text/javascript" src="./splash/snake.js"></script>
+  <script language="javascript" type="text/javascript" src="./splash/snakes.js"></script>
+  <script language="javascript" type="text/javascript" src="./splash/splash.js"></script>
+
+  <style>
+    body {
+      padding: 0; margin: 0;
+    }
+    .content {
+      margin:auto;
+    }
+    canvas {
+    	position: fixed;
+    	top: 0;
+    	left: 0;
+    	z-index: -10;
+    }
+  </style>
 </head>
 <body>
+  <div class="content">
+
   <h1>P5 * js</h1>
 
   <h2>Scribbles</h2>
   <p>Using </p>
   <dl>
+
     <dt><a href="./fibonacci/">Fibonacci</a></dt>
     <dd>Generate numbers according <a href="https://en.wikipedia.org/wiki/Fibonacci_number">algorithm</a></dd>
+
     <dt><a href="./linescanner">Line scanner</a></dt>
-    <dd>Scans a line for circular blobs.</dd>
+    <dd>Scans image for (circular) blobs line by line.</dd>
+
+    <dt><a href="./perlin">Using perlin noise using particles.</a></dt>
+    <dd>This is my interpretation of Danial Shiffman version.
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/Qf4dIN99e2w" frameborder="0" allowfullscreen></iframe>
+    </dd>
+
   </dl>
   <h2>Technical</h2>
   <p>
@@ -46,5 +79,6 @@
       <dd>With this you can manipulate the HTML document a little.</dd>
     </dl>
   </p>
+</div>
 </body>
 </html>
