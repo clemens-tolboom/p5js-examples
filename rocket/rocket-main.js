@@ -34,7 +34,7 @@ function buildUI() {
   UI.button.mousePressed(restart);
   UI.slider = createSlider(0, 1, mutatieRate, 0.05);
   UI.slider.position(10, 30);
-  UI.slider.style('width', '80px');
+  UI.slider.style('width', '50px');
 }
 
 function restart() {
