@@ -21,7 +21,7 @@ Rocket.prototype.init = function() {
   this.vel = createVector(0, 0);
   this.acc = createVector(0, 0);
 
-  this.allelIndex = 0;
+  this.geneIndex = 0;
   this.engine = 0;
 }
 
@@ -74,11 +74,11 @@ Rocket.prototype.draw = function() {
  * We can also disturb the rocket with arrow keys.
  */
 Rocket.prototype.update = function() {
-  this.readAllel();
+  this.readGene();
   this.vel.add(this.acc);
   this.pos.add(this.vel);
   this.acc.mult(0);
-  this.allelIndex++;
+  this.geneIndex++;
 
   if (keyIsDown(LEFT_ARROW)) {
     this.applyForce(createVector(-0.1, 0));
@@ -100,7 +100,7 @@ Rocket.prototype.readGene = function() {
     this.vel.mult(0);
     return;
   }
-  var m = this.DNA[this.allelIndex];
+  var m = this.DNA[this.geneIndex];
   this.engine = m;
   if (m == 1) {
     this.applyForce(createVector(-0.1, 0));
@@ -137,5 +137,5 @@ Rocket.prototype.setDNA = function(DNA) {
  * When all genes are read we are ready.
  */
 Rocket.prototype.isReady = function() {
-  return this.allelIndex >= this.DNA.length;
+  return this.geneIndex >= this.DNA.length;
 }
