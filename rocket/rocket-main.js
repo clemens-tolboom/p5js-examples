@@ -29,9 +29,9 @@ function setup() {
 
 function buildUI() {
   UI = {};
-  UI.button = createButton('Restart');
-  UI.button.position(10, 10);
-  UI.button.mousePressed(restart);
+  UI.restart = createButton('Restart');
+  UI.restart.position(10, 10);
+  UI.restart.mousePressed(restart);
   UI.slider = createSlider(0, 1, mutatieRate, 0.05);
   UI.slider.position(10, 30);
   UI.slider.style('width', '50px');
