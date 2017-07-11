@@ -46,7 +46,7 @@ Rocket.prototype.draw = function() {
   var k = 1 / this.fitness;
   noStroke();
   fill(255 - k, 0, 0);
-  rect(this.pos.x, this.pos.y, 8, 14);
+  rect(this.pos.x, this.pos.y, 6, 14);
 
   // Draw engine firing if any
   var x = this.pos.x;
@@ -65,7 +65,7 @@ Rocket.prototype.draw = function() {
     y -= 14;
   }
   fill(0, 0, 255, 90);
-  rect(x, y, 4, 4);
+  rect(x, y, 3, 3);
 }
 
 /**
