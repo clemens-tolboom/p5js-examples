@@ -4,7 +4,7 @@
  * Each draw we read the next DNA[allelIndex];
  */
 function Rocket() {
-  this.DNA = new Array(200);
+  this.DNA = new Array(height/2);
   this.restart();
 }
 
