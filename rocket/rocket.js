@@ -1,7 +1,12 @@
 /**
- * Our rocket has DNA as string of fire instructions.
+ * Our rocket has DNA as a string of fire instructions.
  *
- * Each draw we read the next DNA[allelIndex];
+ * DNA has genen encoding instructions. We assume 4 engines: left, right, up
+ * and down. A gene encode one engine is fired. Each step we read the
+ * next DNA[geneIndex].
+ *
+ * @TODO: why not encode for NO engine firing?
+ * @TODO: could we let rockets land instead of being nearby the target?
  */
 function Rocket() {
   this.DNA = new Array(height/2);
@@ -21,15 +26,20 @@ Rocket.prototype.init = function() {
 }
 
 /**
- * Restart with new DNA.
+ * Start over with new DNA.
+ *
  */
 Rocket.prototype.restart = function() {
   for (var i = 0; i < this.DNA.length; i++) {
+    // @TODO: add a no engine fired aka 0?
     this.DNA[i] = floor(random([1, 2, 3, 4]));
   }
   this.init();
 }
 
+/**
+ * We draw the rocket with its engine firing.
+ */
 Rocket.prototype.draw = function() {
   rectMode(RADIUS);
 
@@ -59,7 +69,9 @@ Rocket.prototype.draw = function() {
 }
 
 /**
- * We can disturb the rocket with arrow keys.
+ * Each update we read the next gene and apply forces.
+ *
+ * We can also disturb the rocket with arrow keys.
  */
 Rocket.prototype.update = function() {
   this.readAllel();
@@ -80,8 +92,11 @@ Rocket.prototype.update = function() {
   }
 }
 
-Rocket.prototype.readAllel = function() {
-  if (this.allelIndex >= this.DNA.length) {
+/**
+ * We need to know what engine to fire.
+ */
+Rocket.prototype.readGene = function() {
+  if (this.geneIndex >= this.DNA.length) {
     this.vel.mult(0);
     return;
   }
@@ -101,16 +116,26 @@ Rocket.prototype.readAllel = function() {
   }
 }
 
-
+/**
+ * Forces are added to the current accelleration.
+ *
+ * @TODO: add a mass to a rocket?
+ */
 Rocket.prototype.applyForce = function(f) {
   this.acc.add(f);
 }
 
+/**
+ * setDNA is called when generating the next generation.
+ */
 Rocket.prototype.setDNA = function(DNA) {
   this.init();
   this.DNA = DNA;
 }
 
+/**
+ * When all genes are read we are ready.
+ */
 Rocket.prototype.isReady = function() {
   return this.allelIndex >= this.DNA.length;
 }
