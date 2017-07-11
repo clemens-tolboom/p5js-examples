@@ -17,6 +17,7 @@ Rocket.prototype.init = function() {
   this.acc = createVector(0, 0);
 
   this.allelIndex = 0;
+  this.engine = 0;
 }
 
 /**
@@ -30,10 +31,31 @@ Rocket.prototype.restart = function() {
 }
 
 Rocket.prototype.draw = function() {
+  rectMode(RADIUS);
+
   var k = 1 / this.fitness;
   noStroke();
   fill(255 - k, 0, 0);
   rect(this.pos.x, this.pos.y, 8, 14);
+
+  // Draw engine firing if any
+  var x = this.pos.x;
+  var y = this.pos.y;
+
+  if (this.engine == 1) {
+    x += 8;
+  }
+  else if (this.engine == 2) {
+    x -= 8;
+  }
+  else if (this.engine == 3) {
+    y += 14;
+  }
+  else if (this.engine == 4) {
+    y -= 14;
+  }
+  fill(0, 0, 255, 90);
+  rect(x, y, 4, 4);
 }
 
 /**
@@ -64,6 +86,7 @@ Rocket.prototype.readAllel = function() {
     return;
   }
   var m = this.DNA[this.allelIndex];
+  this.engine = m;
   if (m == 1) {
     this.applyForce(createVector(-0.1, 0));
   }
