@@ -10,10 +10,10 @@ var target;
 var UI;
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(800, 800);
 
   startPoint = createVector(width / 2, height - 20);
-  target = createVector(width / 2, 3);
+  target = createVector(width / 2, 10);
 
   rockets = new Array(250);
   for (var i = 0; i < rockets.length; i++) {
