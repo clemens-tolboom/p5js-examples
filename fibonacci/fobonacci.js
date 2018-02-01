@@ -13,7 +13,7 @@ function setup() {
   
   stopLevel = 0.3;
   
-  console.log("Stopping at " + stopLevel);
+  logP.html(logP.html() + "<br/>Stopping at frameRate less then " + stopLevel + "<br/>");
 }
 
 function draw() {
@@ -21,13 +21,14 @@ function draw() {
   var regel = 'fib(' + (result.length - 1) + ') = ' + result[result.length-1]+ "\t"+ 'frameRate: ' + (floor(100*frameRate())/ 100);
   text += '<br/>' + regel;
   console.log(regel);
-  logP.html(text);
 
   result[result.length] = fib(result.length);
 
   if (frameRate()< stopLevel && result.length > 2 || result.length > 500) {
     noLoop();
+    text += '<br/>STOPPED';
   }
+  logP.html(text);
 }
 
 function fib(x) {
