@@ -54,11 +54,13 @@ class Asteroids {
             canFire: 1,
             // range: this.rockStart - 0
             rocks: 0,
+            // range: 0 -
+            mass:0,
             // range: 0 - 1
             dead: 0,
             won: 0,
             // thread directions; range element Array(8) : -255 - 255
-            // TODO: fix thread values
+            // TODO: fix for range: [-255,255] threat values
             radar: [],
         };
         this.spaceship = new Spaceship(createVector(width / 2, height / 2));

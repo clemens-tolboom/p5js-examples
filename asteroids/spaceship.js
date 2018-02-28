@@ -44,6 +44,7 @@ class Spaceship extends SpaceObject {
     }
 
     canFire() {
+        //console.log('Can fire: ' + this.bulletLastFired + ' / ' + this.bulletDelay);
         return this.bulletLastFired <= 0;
     }
 
