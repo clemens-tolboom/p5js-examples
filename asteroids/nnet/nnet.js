@@ -98,8 +98,12 @@ class Matrix {
 
         for (var i = 0; i < row; i++) {
             for (var j = 0; j < col; j++) {
-                a[i][j] = random();
+                a[i][j] = random(-1,1);
             }
         }
+    }
+
+    toJson() {
+        return this.matrix;
     }
 }
