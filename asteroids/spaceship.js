@@ -172,8 +172,8 @@ class Spaceship extends SpaceObject {
             // line(0, 0, this.scanRange, 0);
             if (this.radar[i] > 0) {
                 noStroke();
-                fill(255, 0, 0, 40);
-                triangle(0, 0, this.scanRange / 4, 0, 0.7 * this.scanRange / 4, 0.7 * this.scanRange / 4);
+                fill(255, 0, 0, 30);
+                triangle(0, 0, this.scanRange, 0, 0.7 * this.scanRange, 0.7 * this.scanRange);
 
             }
             rotate(45);
