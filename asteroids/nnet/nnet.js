@@ -49,6 +49,10 @@ class nNet {
             this.matrices.push(m);
         }
 
+        this.randomize();
+    }
+
+    randomize() {
         for (let m of this.matrices) {
             m.randomize();
         }
@@ -56,8 +60,16 @@ class nNet {
 
     forward() {
         for (let m of this.matrices) {
-           m.forward();
+            m.forward();
         }
+    }
+
+    getState() {
+        let result = [];
+        for (let m of this.matrices) {
+            result.push(m.getState());
+        }
+        return result;
     }
 }
 
@@ -98,12 +110,15 @@ class Matrix {
 
         for (var i = 0; i < row; i++) {
             for (var j = 0; j < col; j++) {
-                a[i][j] = random(-1,1);
+                a[i][j] = random(-1, 1);
             }
         }
     }
 
-    toJson() {
-        return this.matrix;
+    getState() {
+        return {
+            type: 'matrix',
+            value: this.matrix
+        }
     }
 }
