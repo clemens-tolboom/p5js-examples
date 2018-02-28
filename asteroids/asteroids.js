@@ -61,8 +61,8 @@ class Asteroids {
             // TODO: fix thread values
             radar: [],
         };
-        this.rocket = new Rocket(createVector(width / 2, height / 2));
-        this.rocket.bulletDelay = this.bulletReloadTime;
+        this.spaceship = new Spaceship(createVector(width / 2, height / 2));
+        this.spaceship.bulletDelay = this.bulletReloadTime;
 
     }
 
@@ -90,25 +90,25 @@ class Asteroids {
 
         if (this.inputs.left || this.inputs.right) {
             if (this.inputs.left) {
-                this.rocket.rotate(-1);
+                this.spaceship.rotate(-1);
             }
             else {
-                this.rocket.rotate(1);
+                this.spaceship.rotate(1);
             }
         }
 
         if (this.inputs.up || this.inputs.down) {
             if (this.inputs.up) {
-                this.rocket.thrust(1);
+                this.spaceship.thrust(1);
             }
             else {
-                this.rocket.thrust(-1);
+                this.spaceship.thrust(-1);
             }
         }
 
         if (this.inputs.space) {
             if (this.canFire()) {
-                this.bullets.push(this.rocket.fire());
+                this.bullets.push(this.spaceship.fire());
                 this.outputs.score -= this.bullerCost;
             }
         }
@@ -123,11 +123,11 @@ class Asteroids {
         this.bullets = this.bullets.filter((bullet) => bullet.isActive());
         this.rocks = this.rocks.filter((rock) => rock.isActive());
 
-        this.rocket.radarTest();
+        this.spaceship.radarTest();
         for (var rock of this.rocks) {
             rock.update();
             rock.draw();
-            this.rocket.radarTest(rock);
+            this.spaceship.radarTest(rock);
             for (var bullet of this.bullets) {
 
                 if (rock.inRange(bullet)) {
@@ -147,36 +147,36 @@ class Asteroids {
         }
 
         for (var rock of this.rocks) {
-            if (this.rocket.inRange(rock)) {
-                console.log("Rocket hit by rock");
-                this.rocket.active = false;
+            if (this.spaceship.inRange(rock)) {
+                //console.log("Spaceship hit by rock");
+                this.spaceship.active = false;
             }
         }
 
-        if (this.rocket.isActive()) {
-            this.rocket.run();
+        if (this.spaceship.isActive()) {
+            this.spaceship.run();
         }
         else {
-            this.rocket.display();
+            this.spaceship.display();
         }
 
-        this.outputs.dead = 1 * !this.rocket.isActive();
+        this.outputs.dead = 1 * !this.spaceship.isActive();
         this.outputs.rocks = this.rocks.length;
         this.outputs.won = this.rocks.length === 0 ? 1 : 0;
-        this.outputs.canFire = (this.rocket.canFire()? 1:0);
-        this.outputs.radar = this.rocket.radar;
+        this.outputs.canFire = (this.spaceship.canFire() ? 1 : 0);
+        this.outputs.radar = this.spaceship.radar;
         this.outputs.score += this.timeScore;
         this.drawState();
     }
 
     /**
-     * Only fire when have enough money and rocket has reloaded.
+     * Only fire when have enough money and spaceship has reloaded.
      * @returns {boolean}
      */
     canFire() {
         return this.bullets.length < this.maxBullets
             && this.outputs.score > this.bullerCost
-            && this.rocket.canFire();
+            && this.spaceship.canFire();
     }
 
     drawState() {
@@ -188,7 +188,7 @@ class Asteroids {
 
         textSize(height / scaleY);
 
-        if (!this.rocket.isActive()) {
+        if (!this.spaceship.isActive()) {
             fill(128, 0, 0, 90);
             rect(0, 0, width, height);
 

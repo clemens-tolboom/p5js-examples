@@ -1,4 +1,4 @@
-class Rocket extends SpaceObject {
+class Spaceship extends SpaceObject {
     constructor(position) {
         super(position);
 
