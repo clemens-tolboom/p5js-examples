@@ -95,6 +95,7 @@ class Game {
         this.asteroids = new Asteroids(createVector(width / 2, 50));
 
         this.asteroids.isAI = this.isAI;
+        this.keyDelay = [];
     }
 
 
@@ -107,15 +108,39 @@ class Game {
         return this.asteroids.isAI;
     }
 
-    draw() {
-        if (keyIsDown(65)) {
-            if ((this.keyDelay[65] || 0) <= 0) {
-                this.setAI(!this.getAI());
-                this.keyDelay[65] = 50;
-                console.log('AI: ' + this.getAI() + " A: " + this.keyDelay[65]);
+    /**
+     * A = 65
+     * B 66
+     * ...
+     * Z = 90
+     * @param code
+     * @returns {boolean}
+     */
+    execKey(char) {
+        let code = char.charCodeAt(0);
+        let delay = 25;
+        if (keyIsDown(code)) {
+            if ((this.keyDelay[code] || 0) <= 0) {
+                this.keyDelay[code] = delay;
+                console.log("Key" + char + ' ' + code);
             }
+            return true;
         }
-        this.keyDelay[65]--;
+        this.keyDelay[code]--;
+        return false;
+    }
+
+    draw() {
+
+        if (this.execKey('A')) {
+            this.setAI(!this.getAI());
+        }
+
+        if (this.execKey('R')) {
+            this.neuralNet.randomize();
+            this.restart();
+        }
+
         background(0);
 
         if (this.isAI) {
