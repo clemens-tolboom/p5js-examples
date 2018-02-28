@@ -211,11 +211,17 @@ class Asteroids {
         textSize(height / scaleY / 2);
 
         textAlign(LEFT);
+
         fill(255, 196, 196, 90);
         rect(0, height - 2 * height / scaleY, width, height);
 
         let textBottom = height - 1.5 * height / scaleY;
-        text('Up: ' + this.inputs.up, 10, textBottom);
+        if (this.isAI) {
+            text('AI: Up: ' + this.inputs.up, 10, textBottom);
+        }
+        else {
+            text('Up: ' + this.inputs.up, 10, textBottom);
+        }
         text('Down: ' + this.inputs.down, 1 / 5 * width, textBottom);
         text('Left: ' + this.inputs.left, 2 / 5 * width, textBottom);
         text('Right: ' + this.inputs.right, 3 / 5 * width, textBottom);

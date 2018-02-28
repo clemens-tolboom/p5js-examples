@@ -94,19 +94,28 @@ class Game {
     restart() {
         this.asteroids = new Asteroids(createVector(width / 2, 50));
 
-        if (true) {
-            //if (false) {
-            this.asteroids.isAI = this.isAI;
-            this.asteroids.maxBullets = 500;
-            this.asteroids.rocket.bulletDelay = 0;
-        }
+        this.asteroids.isAI = this.isAI;
     }
 
 
+    setAI(ai) {
+        this.isAI = ai;
+        this.asteroids.isAI = this.isAI;
+    }
+
+    getAI() {
+        return this.asteroids.isAI;
+    }
+
     draw() {
-        if (keyIsDown(66)) {
-            //this.isAI = !this.isAI;
+        if (keyIsDown(65)) {
+            if ((this.keyDelay[65] || 0) <= 0) {
+                this.setAI(!this.getAI());
+                this.keyDelay[65] = 50;
+                console.log('AI: ' + this.getAI() + " A: " + this.keyDelay[65]);
+            }
         }
+        this.keyDelay[65]--;
         background(0);
 
         if (this.isAI) {
