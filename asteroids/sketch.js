@@ -16,6 +16,9 @@ class Game {
     constructor() {
         this.asteroids = null;
         this.restartTicks = -1;
+
+        this.rangeZeroOne = new nRange(0, 1, [0, 1]);
+        this.keyDelay = []
     }
 
     setup() {
@@ -23,17 +26,14 @@ class Game {
 
         createCanvas(1024, 768);
 
-        this.isAI=false;
         this.restart();
 
-        if (this.isAI) {
-            this.nInput = this.vectorizeInput();
-            this.nOutput = this.vectorizeOutput();
+        this.nInput = this.vectorizeInput();
+        this.nOutput = this.vectorizeOutput();
 
-            this.neuralNet = new nNet(this.nInput, this.nOutput, [4, 8]);
+        this.neuralNet = new nNet(this.nInput, this.nOutput, [4, 8]);
 
-            this.neuralNet.forward();
-        }
+        this.neuralNet.forward();
     }
 
     responseKeys() {
@@ -72,7 +72,7 @@ class Game {
         for (let i = 0; i < keys.length; i++) {
             let key = keys[i];
             let val = this.nOutput[i];
-            inputs[key] = val;
+            inputs[key] = this.rangeZeroOne.fromValue(val);
         }
     }
 
