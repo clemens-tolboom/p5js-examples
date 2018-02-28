@@ -34,10 +34,16 @@ class nNet {
             m = new Matrix(input.length, hiddenDims[0]);
             m.input = input;
             this.matrices.push(m);
-
+            let chain = m.output;
             for (var i = 1; i < hiddenDims.length; i++) {
                 m = new Matrix(hiddenDims[i - 1], hiddenDims[i]);
-                m.input = this.matrices[i - 1].output;
+                m.input = chain;
+                chain = m.output;
+                this.matrices.push(m);
+
+                m = new ReLu(chain.length);
+                m.input = chain;
+                chain = m.output;
 
                 this.matrices.push(m);
             }
@@ -54,7 +60,9 @@ class nNet {
 
     randomize() {
         for (let m of this.matrices) {
-            m.randomize();
+            if (m  instanceof Matrix) {
+                m.randomize();
+            }
         }
     }
 
@@ -73,17 +81,40 @@ class nNet {
     }
 }
 
+class ReLu {
+    constructor(rows) {
+        this.output = new Array(rows);
+    }
+
+    forward() {
+        let input = this.input;
+        let output = this.output;
+
+        let rows = output.length;
+        for (let i = 0; i < rows; i++) {
+            output[i] = (input[i] >= 0 ? 0 : input[i]);
+        }
+    }
+
+    getState() {
+        return {
+            state: 'ReLu'
+        };
+    }
+}
+
 class Matrix {
-    constructor(row, col) {
-        let a = new Array(row);
-        for (let i = 0; i < row; i++) {
+    constructor(rows, cols) {
+        // Build 2 dimensional array
+        let a = new Array(rows);
+        for (let i = 0; i < rows; i++) {
             a[i] = new Array(4);
-            for (let j = 0; j < col; j++) {
+            for (let j = 0; j < cols; j++) {
                 a[i][j] = '[' + i + ', ' + j + ']';
             }
         }
         this.matrix = a;
-        this.output = new Array(col);
+        this.output = new Array(cols);
     }
 
     forward() {
