@@ -163,6 +163,22 @@ class Game {
 
             }
         }
+
+        this.drawText();
+
+    }
+
+    drawText() {
+        textAlign(LEFT);
+        let scaleY = 20;
+
+        fill(255, 255, 0, 90);
+        rect(0, 0, width, height/ scaleY);
+
+        let textBottom = height / scaleY - scaleY/2;
+        text('AI A:toggle, R:reset', 10, textBottom);
+
+
     }
 }
 
