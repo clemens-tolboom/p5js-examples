@@ -29,7 +29,6 @@ class Rock extends SpaceObject {
 
     hit() {
         if (this.size > 1) {
-            console.log('Rock split');
             this.reduce();
 
             var rock = new Rock(this.position.copy(), this.direction - 45, this.velocity.mag() * 2, this.size);
@@ -42,7 +41,7 @@ class Rock extends SpaceObject {
 
     draw() {
         if (this.isActive()) {
-            fill(128, 128, 128);
+            fill(128, 128, 128, 250);
         } else {
             fill(255, 0, 0);
         }

@@ -2,9 +2,9 @@
  * Asteroids is the game engine.
  *
  * It manages
- * - 1 rocker aka the player
- * - rocks aka the passive enemies.
- * - bullets fired bij de rocket.
+ * - 1 Spaceship aka the player
+ * - Rocks aka the passive enemies.
+ * - Bullets fired bij de spaceship.
  *
  * It checks for the amount of bullets.
  *
@@ -12,10 +12,10 @@
  */
 class Asteroids {
     /**
-     * Create the game arena with Rocket, Rocks.
+     * Create the game arena with Spaceship, Rocks.
      *
      * @param ps.Vector2D position
-     *   The position of the rocket.
+     *   The position of the spaceship.
      * TODO: remove position
      */
     constructor(position) {
@@ -231,7 +231,6 @@ class Asteroids {
         text('Score: ' + this.outputs.score, 1 / 4 * width, textBottom);
         text('Rocks: ' + this.outputs.rocks, 2 / 4 * width, textBottom);
         text('Radar: ' + this.outputs.radar.join(','), 3 / 4 * width, textBottom);
-
 
     }
 
