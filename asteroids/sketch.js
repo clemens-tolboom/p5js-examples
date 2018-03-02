@@ -130,8 +130,7 @@ class Game {
         return false;
     }
 
-    draw() {
-
+    update() {
         if (this.execKey('A')) {
             this.setAI(!this.getAI());
         }
@@ -141,15 +140,23 @@ class Game {
             this.restart();
         }
 
-        background(0);
-
-        if (this.isAI) {
+        if (this.getAI()) {
             this.mapResponse();
             this.neuralNet.forward();
             this.setAIActions();
         }
 
-        this.asteroids.run();
+        this.asteroids.update();
+
+    }
+
+    draw() {
+
+        background(0);
+
+
+        this.asteroids.draw();
+
         if (this.asteroids.outputs.dead || this.asteroids.outputs.won) {
             if (this.restartTicks == -1) {
                 this.restartTicks = 5;
@@ -165,7 +172,6 @@ class Game {
         }
 
         this.drawText();
-
     }
 
     drawText() {
@@ -189,5 +195,6 @@ function setup() {
 }
 
 function draw() {
+    game.update()
     game.draw();
 }

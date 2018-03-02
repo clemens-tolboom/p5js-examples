@@ -72,7 +72,7 @@ class Asteroids {
         return new Rock(this.origin, random(360), random(2), random([1, 2, 4, 8]));
     }
 
-    run() {
+    update() {
 
         if (keyIsDown(48)) {
             this.setup('one-rocks');
@@ -117,7 +117,6 @@ class Asteroids {
 
         for (var bullet of this.bullets) {
             bullet.update();
-            bullet.draw();
         }
 
         this.bullets = this.bullets.filter((bullet) => !bullet.offScreen());
@@ -128,7 +127,6 @@ class Asteroids {
         this.spaceship.radarTest();
         for (var rock of this.rocks) {
             rock.update();
-            rock.draw();
             this.spaceship.radarTest(rock);
             for (var bullet of this.bullets) {
 
@@ -150,16 +148,12 @@ class Asteroids {
 
         for (var rock of this.rocks) {
             if (this.spaceship.inRange(rock)) {
-                //console.log("Spaceship hit by rock");
                 this.spaceship.active = false;
             }
         }
 
         if (this.spaceship.isActive()) {
-            this.spaceship.run();
-        }
-        else {
-            this.spaceship.display();
+            this.spaceship.update();
         }
 
         this.outputs.dead = 1 * !this.spaceship.isActive();
@@ -168,7 +162,22 @@ class Asteroids {
         this.outputs.canFire = (this.spaceship.canFire() ? 1 : 0);
         this.outputs.radar = this.spaceship.radar;
         this.outputs.score += this.timeScore;
+
+    }
+
+    draw() {
+        for (var bullet of this.bullets) {
+            bullet.draw();
+        }
+
+        for (var rock of this.rocks) {
+            rock.draw();
+        }
+
+        this.spaceship.display();
+
         this.drawState();
+
     }
 
     /**
