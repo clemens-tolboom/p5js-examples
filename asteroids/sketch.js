@@ -18,7 +18,9 @@ class Game {
         this.restartTicks = -1;
 
         this.rangeZeroOne = new nRange(0, 1, [0, 1]);
-        this.keyDelay = []
+        this.keyDelay = [];
+
+        this.waitWhenGameEnd = 100;
     }
 
     setup() {
@@ -158,19 +160,22 @@ class Game {
         this.asteroids.draw();
 
         if (this.asteroids.outputs.dead || this.asteroids.outputs.won) {
-            if (this.restartTicks == -1) {
-                this.restartTicks = 5;
-            }
-            else if (this.restartTicks > 0) {
-                this.restartTicks--;
+            if (this.getAI()) {
+                this.restart();
             }
             else {
-                this.restartTicks = -1;
-                this.restart();
-
+                if (this.restartTicks == -1) {
+                    this.restartTicks = this.waitWhenGameEnd;
+                }
+                else if (this.restartTicks > 0) {
+                    this.restartTicks--;
+                }
+                else {
+                    this.restartTicks = -1;
+                    this.restart();
+                }
             }
         }
-
         this.drawText();
     }
 
