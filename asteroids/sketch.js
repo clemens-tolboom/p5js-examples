@@ -11,6 +11,7 @@
  */
 
 let asteroids;
+let net;
 
 class Game {
 
@@ -27,7 +28,10 @@ class Game {
     setup() {
         angleMode(DEGREES);
 
-        createCanvas(windowWidth, windowHeight);
+        //createCanvas(windowWidth, windowHeight);
+        createCanvas(1024, 800);
+        net = createDiv("NNet");
+
         this.restart();
 
         this.nInput = this.vectorizeInput();
@@ -149,6 +153,8 @@ class Game {
         if (this.execKey('R')) {
             this.neuralNet.randomize();
             this.restart();
+            let network = this.neuralNet.getState();
+            net.html('<pre>' + JSON.stringify(network, null, "\t") + '</pre>');
         }
 
         if (this.getAI()) {
