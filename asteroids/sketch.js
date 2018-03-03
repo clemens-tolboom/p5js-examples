@@ -126,8 +126,8 @@ class Game {
             if ((this.keyDelay[code] || 0) <= 0) {
                 this.keyDelay[code] = delay;
                 console.log("Key" + char + ' ' + code);
+                return true;
             }
-            return true;
         }
         this.keyDelay[code]--;
         return false;
