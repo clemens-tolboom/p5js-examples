@@ -27,8 +27,7 @@ class Game {
     setup() {
         angleMode(DEGREES);
 
-        createCanvas(1024, 768);
-
+        createCanvas(windowWidth, windowHeight);
         this.restart();
 
         this.nInput = this.vectorizeInput();
