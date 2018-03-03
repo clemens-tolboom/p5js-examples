@@ -13,6 +13,7 @@
 let asteroids;
 
 class Game {
+
     constructor() {
         this.asteroids = null;
         this.restartTicks = -1;
@@ -112,10 +113,11 @@ class Game {
 
     /**
      * A = 65
-     * B 66
+     * B = 66
      * ...
      * Z = 90
-     * @param code
+     *
+     * @param char
      * @returns {boolean}
      */
     execKey(char) {
@@ -184,9 +186,9 @@ class Game {
         let scaleY = 20;
 
         fill(255, 255, 0, 90);
-        rect(0, 0, width, height/ scaleY);
+        rect(0, 0, width, height / scaleY);
 
-        let textBottom = height / scaleY - scaleY/2;
+        let textBottom = height / scaleY - scaleY / 2;
         text('AI A:toggle, R:reset', 10, textBottom);
 
 
