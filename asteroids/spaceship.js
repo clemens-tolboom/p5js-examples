@@ -57,9 +57,8 @@ class Spaceship extends SpaceObject {
         }
     }
 
-    run() {
-        this.update();
-        this.display();
+    radarAngles() {
+        return [15, 30, 45];
     }
 
     radarTest(spaceObject) {
@@ -76,8 +75,28 @@ class Spaceship extends SpaceObject {
             // Negative z means left, positive right
             var cross = this.heading.cross(direction);
             var cross_z = cross.z;
+
+            var sector;
+
+            // // Front / Back sectors more precise
+            // if (angle < 15) {
+            //     sector = 0;
+            // }
+            // else if (angle < 45) {
+            //     sector = 1;
+            // } else if (angle < 90) {
+            //     sector = 2;
+            // }
+            // else {
+            //     sector = 3;
+            // }
+            // if (cross_z < 0) {
+            //     sector += 4;
+            // }
+
+
             // Compass sectors
-            var sector = 'S';
+            sector = 'S';
             var delta = 45.0 / 2;
             if (angle < delta) {
                 sector = 'N';
@@ -131,6 +150,8 @@ class Spaceship extends SpaceObject {
                 default:
                     break;
             }
+
+            //this.radar[sector] = 1;
 
             return sector;
         }
