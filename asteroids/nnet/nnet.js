@@ -35,17 +35,16 @@ class nNet {
             m.input = input;
             this.matrices.push(m);
             let chain = m.output;
+
+            chain = this.addSigmoid(chain);
+
             for (var i = 1; i < hiddenDims.length; i++) {
                 m = new Matrix(hiddenDims[i - 1], hiddenDims[i]);
                 m.input = chain;
                 chain = m.output;
                 this.matrices.push(m);
 
-                m = new ReLu(chain.length);
-                m.input = chain;
-                chain = m.output;
-
-                this.matrices.push(m);
+                chain = this.addSigmoid(chain);
             }
 
             m = new Matrix(hiddenDims[hiddenDims.length - 1], output.length);
@@ -53,14 +52,30 @@ class nNet {
             m.output = output;
 
             this.matrices.push(m);
+
+            chain = this.addReLu(m.output);
         }
 
         this.randomize();
     }
 
+    addSigmoid(chain) {
+        let m = new Sigmoid(chain.length);
+        m.input = chain;
+        this.matrices.push(m);
+        return m.output;
+    }
+
+    addReLu(chain) {
+        let m = new ReLu(chain.length);
+        m.input = chain;
+        this.matrices.push(m);
+        return m.output;
+    }
+
     randomize() {
         for (let m of this.matrices) {
-            if (m  instanceof Matrix) {
+            if (m instanceof Matrix) {
                 m.randomize();
             }
         }
@@ -103,6 +118,29 @@ class ReLu {
     }
 }
 
+class Sigmoid {
+    constructor(rows) {
+        this.output = new Array(rows);
+    }
+
+    forward() {
+        let input = this.input;
+        let output = this.output;
+
+        let rows = output.length;
+        for (let i = 0; i < rows; i++) {
+            output[i] = 1 / (1 + Math.exp(-input[i]));
+        }
+    }
+
+    getState() {
+        return {
+            state: 'Sigmoid'
+        };
+    }
+
+}
+
 class Matrix {
     constructor(rows, cols) {
         // Build 2 dimensional array
@@ -134,6 +172,20 @@ class Matrix {
         }
     }
 
+    getRandom() {
+        return Math.random();
+    }
+
+    getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+    }
+
     randomize() {
         let a = this.matrix;
         let row = a.length;
@@ -141,7 +193,7 @@ class Matrix {
 
         for (var i = 0; i < row; i++) {
             for (var j = 0; j < col; j++) {
-                a[i][j] = random(-1, 1);
+                a[i][j] = this.getRandomArbitrary(-1, 1);
             }
         }
     }
