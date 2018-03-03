@@ -103,7 +103,6 @@ class Spaceship extends SpaceObject {
                     sector = 'SE';
                 }
             }
-
             switch (sector) {
                 case 'N':
                     this.radar[0] = 1;
@@ -152,7 +151,7 @@ class Spaceship extends SpaceObject {
         let y = this.position.y;
 
         stroke(255);
-        fill(255)
+        fill(255);
 
         line(x, y, 50 * this.heading.x + x, 50 * this.heading.y + y);
 

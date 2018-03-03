@@ -103,14 +103,13 @@ class Game {
     restart() {
         this.asteroids = new Asteroids(createVector(width / 2, 50));
 
-        this.asteroids.isAI = this.isAI;
+        this.setAI(this.isAI);
         this.keyDelay = [];
     }
 
-
     setAI(ai) {
         this.isAI = ai;
-        this.asteroids.isAI = this.isAI;
+        this.asteroids.isAI = ai;
     }
 
     getAI() {
@@ -149,10 +148,12 @@ class Game {
     }
 
     update() {
+        // Toggle AI
         if (this.execKey('A')) {
             this.setAI(!this.getAI());
         }
 
+        // Randomize AI
         if (this.execKey('R')) {
             this.neuralNet.randomize();
             this.restart();
@@ -230,6 +231,6 @@ function setup() {
 }
 
 function draw() {
-    game.update()
+    game.update();
     game.draw();
 }
