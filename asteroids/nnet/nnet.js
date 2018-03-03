@@ -113,7 +113,7 @@ class ReLu {
 
     getState() {
         return {
-            state: 'ReLu'
+            type: 'ReLu'
         };
     }
 }
@@ -135,7 +135,7 @@ class Sigmoid {
 
     getState() {
         return {
-            state: 'Sigmoid'
+            type: 'Sigmoid'
         };
     }
 
