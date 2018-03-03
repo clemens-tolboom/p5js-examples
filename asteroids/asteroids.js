@@ -86,14 +86,14 @@ class Asteroids {
         }
 
         if (!this.isAI) {
-            this.inputs.left = keyIsDown(LEFT_ARROW);
-            this.inputs.right = keyIsDown(RIGHT_ARROW);
-            this.inputs.up = keyIsDown(UP_ARROW);
-            this.inputs.down = keyIsDown(DOWN_ARROW);
-            this.inputs.space = keyIsDown(32);
+            this.inputs.left = keyIsDown(LEFT_ARROW) ? 1 : 0;
+            this.inputs.right = keyIsDown(RIGHT_ARROW) ? 1 : 0;
+            this.inputs.up = keyIsDown(UP_ARROW) ? 1 : 0;
+            this.inputs.down = keyIsDown(DOWN_ARROW) ? 1 : 0;
+            this.inputs.space = keyIsDown(32) ? 1 : 0;
         }
 
-        if (this.inputs.left || this.inputs.right) {
+        if (this.inputs.left !== this.inputs.right) {
             if (this.inputs.left) {
                 this.spaceship.rotate(-1);
             }
@@ -102,7 +102,7 @@ class Asteroids {
             }
         }
 
-        if (this.inputs.up || this.inputs.down) {
+        if (this.inputs.up !== this.inputs.down) {
             if (this.inputs.up) {
                 this.spaceship.thrust(1);
             }

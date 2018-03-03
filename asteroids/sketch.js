@@ -64,7 +64,7 @@ class Game {
                 val = this.asteroids.outputs[key];
             }
 
-            this.nInput[i] = val;
+            this.nInput[i] = isNaN(val) ? 0 : 1;
         }
     }
 
@@ -121,11 +121,19 @@ class Game {
      */
     execKey(char) {
         let code = char.charCodeAt(0);
-        let delay = 25;
+        // Define 0 key delay fo code
+        if (isNaN(this.keyDelay[code])) {
+            this.keyDelay[code] = 0;
+        }
+
         if (keyIsDown(code)) {
-            if ((this.keyDelay[code] || 0) <= 0) {
-                this.keyDelay[code] = delay;
-                console.log("Key" + char + ' ' + code);
+            //console.log("keyIsDown: " + char);
+            //console.log("Key delay: " + this.keyDelay[code]);
+            console.log(code + ' ' + this.keyDelay[code]);
+
+            if (this.keyDelay[code] <= 0) {
+                console.log("Key " + char + ' ' + code + ' ' + this.keyDelay[code]);
+                this.keyDelay[code] = this.keyDelayTime;
                 return true;
             }
         }
