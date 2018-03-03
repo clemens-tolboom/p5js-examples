@@ -21,6 +21,9 @@ class Game {
 
         this.rangeZeroOne = new nRange(0, 1, [0, 1]);
         this.keyDelay = [];
+        this.keyDelayTime = 100;
+
+        this.AiLoops = 100;
 
         this.waitWhenGameEnd = 100;
     }
@@ -157,14 +160,26 @@ class Game {
             net.html('<pre>' + JSON.stringify(network, null, "\t") + '</pre>');
         }
 
-        if (this.getAI()) {
-            this.mapResponse();
-            this.neuralNet.forward();
-            this.setAIActions();
+        // Toggle speed 100 - 1
+        if (this.execKey('S')) {
+            this.AiLoops = this.AiLoops !== 1 ? 1 : 100;
+        }
+        // Toggle speed 1000 - 1
+        if (this.execKey('D')) {
+            this.AiLoops = this.AiLoops !== 1 ? 1 : 1000;
         }
 
-        this.asteroids.update();
-
+        if (this.getAI()) {
+            for (var i = 0; i < this.AiLoops; i++) {
+                this.mapResponse();
+                this.neuralNet.forward();
+                this.setAIActions();
+                this.asteroids.update();
+            }
+        }
+        else {
+            this.asteroids.update();
+        }
     }
 
     draw() {
@@ -202,7 +217,7 @@ class Game {
         rect(0, 0, width, height / scaleY);
 
         let textBottom = height / scaleY - scaleY / 2;
-        text('AI A:toggle, R:reset', 10, textBottom);
+        text('AI A:toggle, R:randomize, Simulation S: x100; D: x1000 =' + this.AiLoops, 10, textBottom);
 
 
     }
