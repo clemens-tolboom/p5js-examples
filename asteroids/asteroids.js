@@ -35,10 +35,13 @@ class Asteroids {
 
         this.rockStart = 10;
 
+        this.massInRocks = 0;
         for (var i = 0; i < this.rockStart; i++) {
             var rock = this.randomRock();
+            this.massInRocks+= rock.size * rock.size;
             this.rocks.push(rock);
         }
+        this.massLeft = this.massInRocks;
 
         this.inputs = {
             up: 0,
@@ -55,7 +58,7 @@ class Asteroids {
             // range: this.rockStart - 0
             rocks: 0,
             // range: 0 -
-            mass:0,
+            mass: 0,
             // range: 0 - 1
             dead: 0,
             won: 0,
@@ -137,16 +140,13 @@ class Asteroids {
                     if (newRock) {
                         this.rocks.push(newRock);
                     }
-                    else {
-
-                    }
                 }
-
             }
-
         }
 
+        this.massLeft = 0;
         for (var rock of this.rocks) {
+            this.massLeft+= rock.size * rock.size;
             if (this.spaceship.inRange(rock)) {
                 this.spaceship.active = false;
             }
@@ -162,6 +162,7 @@ class Asteroids {
         this.outputs.canFire = (this.spaceship.canFire() ? 1 : 0);
         this.outputs.radar = this.spaceship.radar;
         this.outputs.score += this.timeScore;
+        this.outputs.mass = Math.floor(100* (this.massInRocks - this.massLeft) / this.massInRocks);
 
     }
 
@@ -245,9 +246,10 @@ class Asteroids {
 
         textBottom = height - height / scaleY / 2;
         text('Can fire: ' + this.outputs.canFire, 10, textBottom);
-        text('Score: ' + this.outputs.score, 1 / 4 * width, textBottom);
-        text('Rocks: ' + this.outputs.rocks, 2 / 4 * width, textBottom);
-        text('Radar: ' + this.outputs.radar.join(','), 3 / 4 * width, textBottom);
+        text('Mass: ' + this.outputs.mass, 1 / 5 * width, textBottom);
+        text('Score: ' + this.outputs.score, 2 / 5 * width, textBottom);
+        text('Rocks: ' + this.outputs.rocks, 3 / 5 * width, textBottom);
+        text('Radar: ' + this.outputs.radar.join(','), 4 / 5 * width, textBottom);
 
     }
 
