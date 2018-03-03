@@ -33,7 +33,7 @@ class Game {
 
         //createCanvas(windowWidth, windowHeight);
         createCanvas(1024, 800);
-        net = createDiv("NNet");
+        //net = createDiv("NNet");
 
         this.restart();
 
@@ -158,7 +158,10 @@ class Game {
             this.neuralNet.randomize();
             this.restart();
             let network = this.neuralNet.getState();
-            net.html('<pre>' + JSON.stringify(network, null, "\t") + '</pre>');
+            console.log(network);
+            console.log(JSON.stringify(network, null, "\t"));
+            // TODO: pressing arrows makes screen scroll (on Firefox)
+            //net.html('<pre>' + JSON.stringify(network, null, "\t") + '</pre>');
         }
 
         // Toggle speed 100 - 1

@@ -201,6 +201,7 @@ class Matrix {
     getState() {
         return {
             type: 'matrix',
+            dims: [this.matrix.length, this.matrix[0].length],
             value: this.matrix
         }
     }
