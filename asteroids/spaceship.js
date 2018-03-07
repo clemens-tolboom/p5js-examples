@@ -13,7 +13,7 @@ class Spaceship extends SpaceObject {
 
         this.position = position.copy();
 
-        this.scanRange = 400;
+        this.scanRange = height/4;
         this.radar = [0, 0, 0, 0, 0, 0, 0, 0];
     }
 

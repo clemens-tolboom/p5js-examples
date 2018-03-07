@@ -26,13 +26,19 @@ class Game {
         this.AiLoops = 100;
 
         this.waitWhenGameEnd = 100;
+
+        this.wins = 0;
+        this.lost = 0;
+
+        this.canvas = null;
+
     }
 
     setup() {
         angleMode(DEGREES);
 
         //createCanvas(windowWidth, windowHeight);
-        createCanvas(1024, 800);
+        this.canvas = createCanvas(1024, 800);
         //net = createDiv("NNet");
 
         this.restart();
@@ -40,20 +46,38 @@ class Game {
         this.nInput = this.vectorizeInput();
         this.nOutput = this.vectorizeOutput();
 
-        this.neuralNet = new nNet(this.nInput, this.nOutput, [4, 8]);
+        this.nNetProducer = new NeuralNetProducer(this.nInput, this.nOutput, [5]);
+        this.genetics = new Species(this.nNetProducer, 25, 0.1, 0.01);
+
+        this.nextSpecie()
 
         this.neuralNet.forward();
+
+        this.canvas.mouseReleased(function(event){ game.mouseReleased(event)})
+        this.canvas.mouseMoved(function(event){ game.mouseMoved(event)})
+    }
+
+    mouseReleased(event) {
+        //console.log("Canvas mouse Released", event, mouseX, mouseY);
+    }
+
+    mouseMoved(event) {
+        // if (event.clientY< 40) {
+        //     fill(255,255,0);
+        //     line(0,0, event.clientX, event.clientY);
+        //     console.log("Canvas mouse Moved", event, event.clientX, event.clientY);
+        // }
     }
 
     responseKeys() {
-        return ['canFire', 'score', 'rocks'
+        return ['canFire', 'mass', 'rocks'
             , 'radar-0', 'radar-1', 'radar-2', 'radar-3'
             , 'radar-4', 'radar-5', 'radar-6', 'radar-7'
         ];
     }
 
     actionKeys() {
-        return ['up', 'down', 'left', 'right', 'fire', 'space'];
+        return ['up', 'down', 'left', 'right', 'space'];
     }
 
     mapResponse() {
@@ -71,7 +95,7 @@ class Game {
                 val = this.asteroids.outputs[key];
             }
 
-            this.nInput[i] = isNaN(val) ? 0 : 1;
+            this.nInput[i] = val;//isNaN(val) ? 0 : 1;
         }
     }
 
@@ -102,9 +126,7 @@ class Game {
 
     restart() {
         this.asteroids = new Asteroids(createVector(width / 2, 50));
-
         this.setAI(this.isAI);
-        this.keyDelay = [];
     }
 
     setAI(ai) {
@@ -114,6 +136,10 @@ class Game {
 
     getAI() {
         return this.asteroids.isAI;
+    }
+
+    nextSpecie() {
+        this.neuralNet = this.genetics.testSpecie().getItem();
     }
 
     /**
@@ -135,7 +161,7 @@ class Game {
         if (keyIsDown(code)) {
             //console.log("keyIsDown: " + char);
             //console.log("Key delay: " + this.keyDelay[code]);
-            console.log(code + ' ' + this.keyDelay[code]);
+            //console.log(code + ' ' + this.keyDelay[code]);
 
             if (this.keyDelay[code] <= 0) {
                 console.log("Key " + char + ' ' + code + ' ' + this.keyDelay[code]);
@@ -155,12 +181,13 @@ class Game {
 
         // Randomize AI
         if (this.execKey('R')) {
-            this.neuralNet.randomize();
+            //this.neuralNet.randomize();
+            this.nextSpecie();
             this.restart();
-            let network = this.neuralNet.getState();
-            console.log(network);
-            console.log(JSON.stringify(network, null, "\t"));
-            // TODO: pressing arrows makes screen scroll (on Firefox)
+            //let network = this.neuralNet.getState();
+            // console.log(network);
+            // console.log(JSON.stringify(network, null, "\t"));
+            // // TODO: pressing arrows makes screen scroll (on Firefox)
             //net.html('<pre>' + JSON.stringify(network, null, "\t") + '</pre>');
         }
 
@@ -170,13 +197,22 @@ class Game {
         }
         // Toggle speed 1000 - 1
         if (this.execKey('D')) {
-            this.AiLoops = this.AiLoops !== 1 ? 1 : 1000;
+            this.AiLoops = 1000;
+        }
+
+        if (this.execKey('F')) {
+            this.AiLoops = 10000;
         }
 
         if (this.getAI()) {
             for (var i = 0; i < this.AiLoops; i++) {
                 this.mapResponse();
+
+                this.neuralNet.backward();
                 this.neuralNet.forward();
+
+                //console.log('nOut', this.neuralNet.output);
+
                 this.setAIActions();
                 this.asteroids.update();
             }
@@ -194,10 +230,27 @@ class Game {
         this.asteroids.draw();
 
         if (this.asteroids.outputs.dead || this.asteroids.outputs.won) {
+            if (this.asteroids.outputs.dead) {
+                this.lost += 1;
+            } else if (this.asteroids.outputs.won) {
+                this.wins += 1;
+            }
+
             if (this.getAI()) {
+                let maxGames = 10;
+                if (this.wins + this.lost === maxGames) {
+                    let mass = this.asteroids.outputs.mass;
+                    let score = this.wins + mass;
+                    this.genetics.setScore(score);
+                    this.wins = 0;
+                    this.lost = 0;
+                    this.nextSpecie();
+
+                }
                 this.restart();
             }
             else {
+                // Pause some time
                 if (this.restartTicks == -1) {
                     this.restartTicks = this.waitWhenGameEnd;
                 }
@@ -221,7 +274,9 @@ class Game {
         rect(0, 0, width, height / scaleY);
 
         let textBottom = height / scaleY - scaleY / 2;
-        text('AI A:toggle, R:randomize, Simulation S: x100; D: x1000 =' + this.AiLoops, 10, textBottom);
+        var stats = 'AI A:toggle, R:randomize, Speed S,D,F =' + this.AiLoops + ' GA ' + this.genetics.getStatus();
+        stats += ' Wins: ' + this.wins + ' Lost: ' + this.lost;
+        text(stats, 10, textBottom);
 
 
     }
@@ -236,4 +291,23 @@ function setup() {
 function draw() {
     game.update();
     game.draw();
+}
+
+class NeuralNetProducer {
+    constructor(nInput, nOutput, aHiddenLayers) {
+        this.nInput = nInput;
+        this.nOutput = nOutput;
+        this.aHiddenLayers = aHiddenLayers;
+    }
+
+    getOne() {
+        this.nNet = new nNet(this.nInput, this.nOutput, this.aHiddenLayers);
+        return this.nNet;
+    }
+
+    getClone(item) {
+        let cloned = this.getOne();
+        cloned.setState(item.getState());
+        return cloned;
+    }
 }
