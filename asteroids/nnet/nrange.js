@@ -3,6 +3,7 @@ class nRange {
         this.min = min;
         this.max = max;
         if (set) {
+            set.push(max+0.01);
             this.set = set;
         }
     }
@@ -11,7 +12,7 @@ class nRange {
         let result = input;
         if (result < this.min) {
             result = this.min;
-        } else if (this.max < result) {
+        } else if (this.max < input) {
             result = this.max;
         }
         if (this.set) {

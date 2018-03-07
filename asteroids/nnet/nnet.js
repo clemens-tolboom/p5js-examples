@@ -24,53 +24,81 @@ class nNet {
         let m;
 
         if (hiddenDims.length === 0) {
-            m = new Matrix(input.length, output.length);
-            m.input = input;
-            m.output = output;
+            let chain = this.input;
 
+            m = new Matrix(this.input.length, this.output.length);
             this.matrices.push(m);
+
+            m.input = chain;
+            chain = m.output;
+
+            m = new ReLu(chain.length);
+            this.matrices.push(m);
+
+            m.input = chain;
+            m.output = this.output;
         }
         else {
-            m = new Matrix(input.length, hiddenDims[0]);
-            m.input = input;
-            this.matrices.push(m);
-            let chain = m.output;
+            let chain = this.input;
 
-            chain = this.addSigmoid(chain);
+            m = new Matrix(input.length, hiddenDims[0]);
+            this.matrices.push(m);
+
+            m.input = input;
+            chain = m.output;
+
+            m = new Sigmoid(chain.length);
+            this.matrices.push(m);
+
+            m.input = chain;
+            chain = m.output;
 
             for (var i = 1; i < hiddenDims.length; i++) {
                 m = new Matrix(hiddenDims[i - 1], hiddenDims[i]);
-                m.input = chain;
-                chain = m.output;
                 this.matrices.push(m);
 
-                chain = this.addSigmoid(chain);
+                m.input = chain;
+                chain = m.output;
+
+                m = new Sigmoid(chain.length);
+                this.matrices.push(m);
+
+                m.input = chain;
+                chain = m.output;
             }
 
             m = new Matrix(hiddenDims[hiddenDims.length - 1], output.length);
-            m.input = this.matrices[this.matrices.length - 1].output;
-            m.output = output;
-
             this.matrices.push(m);
 
-            chain = this.addReLu(m.output);
+            m.input = chain;
+            chain = m.output;
+
+            m = new ReLu(chain.length);
+            this.matrices.push(m);
+
+            m.input = chain;
+            m.output = this.output;
+        }
+
+        if (this.matrices[0].input !== this.input) {
+            console.log(m, m.getState(), this.m.getState());
+            throw('Invalid lineage for input.');
+        }
+
+        var chain = this.input;
+        for (let m of this.matrices) {
+            if (m.input !== chain) {
+                console.log(m, m.getState(), this.m.getState());
+                throw("Invalid lineage for chaining.");
+            }
+            chain = m.output;
+        }
+        if (this.matrices[this.matrices.length - 1].output !== this.output) {
+            console.log(m, m.getState(), this.m.getState());
+            throw("Invalid lineage for output.");
         }
 
         this.randomize();
-    }
-
-    addSigmoid(chain) {
-        let m = new Sigmoid(chain.length);
-        m.input = chain;
-        this.matrices.push(m);
-        return m.output;
-    }
-
-    addReLu(chain) {
-        let m = new ReLu(chain.length);
-        m.input = chain;
-        this.matrices.push(m);
-        return m.output;
     }
 
     randomize() {
@@ -87,12 +115,26 @@ class nNet {
         }
     }
 
+    backward() {
+        for(var m of this.matrices) {
+            m.backward();
+        }
+    }
+
     getState() {
         let result = [];
         for (let m of this.matrices) {
             result.push(m.getState());
         }
         return result;
+    }
+
+    setState(state) {
+        for (let i = 0; i < state.length; i++) {
+            let m = this.matrices[i];
+            m.setState(state[i]);
+        }
+
     }
 }
 
@@ -107,14 +149,20 @@ class ReLu {
 
         let rows = output.length;
         for (let i = 0; i < rows; i++) {
-            output[i] = (input[i] >= 0 ? 0 : input[i]);
+            output[i] = (input[i] >= 0 ? input[i] : 0);
         }
     }
+
+    backward() {}
 
     getState() {
         return {
             type: 'ReLu'
         };
+    }
+
+    setState(state) {
+        // NOP
     }
 }
 
@@ -133,10 +181,16 @@ class Sigmoid {
         }
     }
 
+    backward() {};
+
     getState() {
         return {
             type: 'Sigmoid'
         };
+    }
+
+    setState(state) {
+        // NOP
     }
 
 }
@@ -153,6 +207,7 @@ class Matrix {
         }
         this.matrix = a;
         this.output = new Array(cols);
+        this.bias = new Array(cols);
     }
 
     forward() {
@@ -168,8 +223,14 @@ class Matrix {
             for (let row = 0; row < rows; row++) {
                 result += m[row][col] * input[row];
             }
-            out[col] = result;
+            out[col] = result + this.bias[col];
         }
+    }
+
+    backward() {
+        // adjust matrix
+
+        // adjust bias
     }
 
     getRandom() {
@@ -188,12 +249,14 @@ class Matrix {
 
     randomize() {
         let a = this.matrix;
+        let b = this.bias;
         let row = a.length;
         let col = a[0].length;
 
         for (var i = 0; i < row; i++) {
             for (var j = 0; j < col; j++) {
                 a[i][j] = this.getRandomArbitrary(-1, 1);
+                b[j] = this.getRandomArbitrary(-1, 1);
             }
         }
     }
@@ -202,7 +265,25 @@ class Matrix {
         return {
             type: 'matrix',
             dims: [this.matrix.length, this.matrix[0].length],
-            value: this.matrix
+            matrix: this.matrix,
+            bias: this.bias
+        }
+    }
+
+    setState(state) {
+        if (state.type !== 'Matrix') {
+            throw 'State ' + state.type + ' is not a matrix';
+        }
+
+        let a = this.matrix;
+        let b = this.bias;
+        let row = a.length;
+        let col = a[0].length;
+
+        this.matrix = state.matrix;
+        this.bias = state.bias.clone();
+        for (var j = 0; j < col; j++) {
+            b[j] = state.bias;
         }
     }
 }
