@@ -1,5 +1,23 @@
+/**
+ * @file
+ *
+ * The play needs to escape the grid from the bottom.
+ *
+ * Score:
+ * - hit a wall: -1 (top,left, right)
+ * - hit bottom: +10
+ *
+ * Value function?!?
+ */
+
+// Actions for each cell of the grid.
 var actions;
+
+// Player
 var player;
+
+// TODO add policy class
+
 function setup() {
   createCanvas(800, 800);
 
@@ -19,6 +37,8 @@ function draw() {
   background(255);
   actions.draw();
   player.draw();
+  player.move();
+
 }
 
 class Player {
@@ -26,25 +46,31 @@ class Player {
     this.cols = actions.cols;
     this.rows = actions.rows;
 
+    // Current position
     this.col = this.cols / 2;
     this.row = 0;
 
+    // Scale factor for drawing
     this.w = width / this.cols;
     this.h = height / this.rows;
   }
 
   draw() {
-    stroke(0,255, 0);
     fill(0,0,255);
+
     ellipse(this.col * this.w + this.w/2, this.row * this.h + this.h/2, 11, 11);
-    this.move();
   }
 
+  /**
+   * Take a move for the current state.
+   */
   move() {
     let r = this.row;
     let c = this.col;
+
     let move = actions.takeMove(r, c);
 
+    // TODO: is this policy related code?!?
     // Execute move
     let score = this['move_' + move]();
 
