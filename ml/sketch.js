@@ -48,6 +48,10 @@ class Player {
     // Execute move
     let score = this['move_' + move]();
 
+    // apply score to new location
+    actions.actions[this.row][this.col].value += score * 0.1;
+
+    // adjust score for current location
     actions.updateAction(r,c,move, score);
   }
 
