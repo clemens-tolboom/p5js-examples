@@ -208,6 +208,10 @@ class Game {
             for (var i = 0; i < this.AiLoops; i++) {
                 this.mapResponse();
 
+                if (this.asteroids.gameOver()) {
+                    break;
+                }
+
                 this.neuralNet.backward();
                 this.neuralNet.forward();
 
@@ -229,7 +233,7 @@ class Game {
 
         this.asteroids.draw();
 
-        if (this.asteroids.outputs.dead || this.asteroids.outputs.won) {
+        if (this.asteroids.gameOver()) {
             if (this.asteroids.outputs.dead) {
                 this.lost += 1;
             } else if (this.asteroids.outputs.won) {

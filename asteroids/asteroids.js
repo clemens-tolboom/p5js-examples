@@ -27,9 +27,9 @@ class Asteroids {
         this.timeScore = 1;
 
         this.bullets = [];
-        this.maxBullets = 50;
-        this.bulletReloadTime = 60;
-        this.bullerCost = 100;
+        this.maxBullets = 500;
+        this.bulletReloadTime = 2;
+        this.bullerCost = 1;
 
         this.isAI = false;
 
@@ -69,6 +69,10 @@ class Asteroids {
         this.spaceship = new Spaceship(createVector(width / 2, height / 2));
         this.spaceship.bulletDelay = this.bulletReloadTime;
 
+    }
+
+    gameOver() {
+        return this.outputs.dead || this.outputs.won;
     }
 
     randomRock() {
