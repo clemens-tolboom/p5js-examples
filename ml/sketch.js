@@ -138,6 +138,8 @@ class Action {
     this.left = 0.25;
     this.right = 0.25;
     this.value = 0;
+
+    this.normalize();
   }
 
   draw(x,y) {
