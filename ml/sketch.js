@@ -7,7 +7,7 @@ function setup() {
 }
 
 function restart() {
-  actions = new Actions(10,10);
+  actions = new Actions(8,8);
   player = new Player();
 }
 
@@ -41,10 +41,11 @@ class Player {
   }
 
   move() {
-    let move = actions.takeMove(this.row, this.col);
     let r = this.row;
     let c = this.col;
+    let move = actions.takeMove(r, c);
 
+    // Execute move
     let score = this['move_' + move]();
 
     actions.updateAction(r,c,move, score);
@@ -64,7 +65,7 @@ class Player {
 
   move_down() {
     var score = 0;
-    if (this.row === this.rows -1) {
+    if (this.row === this.rows -2) {
       score = 10;
       this.row = 0;
     }
@@ -106,11 +107,12 @@ class Action {
     this.down = 0.25;
     this.left = 0.25;
     this.right = 0.25;
+    this.value = 0;
   }
 
   draw(x,y) {
     stroke(255,0, 0);
-    ellipse(x,y,5,5);
+    ellipse(x, y, (this.value+5) * 4, (this.value+5) * 4);
 
     stroke(0);
 
@@ -139,6 +141,7 @@ class Action {
 
   update(move, score) {
     this[move]+= score * 0.01;
+    this.value+= score * 0.1;
     this.normalize();
   }
 
@@ -170,7 +173,7 @@ class Actions {
   }
 
   updateAction(row,col,move, score) {
-    return this.actions[row][col].update(move, score);
+    this.actions[row][col].update(move, score);
   }
 
   draw() {
