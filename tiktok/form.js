@@ -92,6 +92,20 @@ class Form {
         }
     }
 
+    showActive() {
+        let current = metronome.current;
+        if (this.lastBeat !== current) {
+            this.lastBeat = current;
+            let target = document.querySelector("tbody tr");
+            console.log(current);
+
+            for (let i = 0; i < target.children.length; i++) {
+              target.children[i].className = target.children[i].className.replace(" hit", '');
+            }
+            target.children[current].className = target.children[current].className + " hit";
+        }
+    }
+
     htmlForm() {
         let f = document.getElementById('form');
         let d = document.getElementById('patterns');

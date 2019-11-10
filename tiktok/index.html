@@ -30,6 +30,19 @@
       border: 1px solid pink;
     }
 
+    table {
+      width:100%;
+    }
+    tr {
+      display: inline-block;
+      width: 100%;
+    }
+    td {
+      width: 20px;
+    }
+    td > div {
+      margin-top: 2px;
+    }
     td.beat .first {
       background-color: lightgrey;
     }
@@ -49,6 +62,17 @@
     td.beat.on.third .third {
       background-color: lightgreen;
     }
+
+    td.beat.on.first.hit .first {
+      background-color: green;
+    }
+    td.beat.on.second.hit .second {
+      background-color: green;
+    }
+    td.beat.on.third.hit .third {
+      background-color: green;
+    }
+
   </style>
 </head>
 

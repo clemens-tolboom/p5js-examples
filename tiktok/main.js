@@ -4,8 +4,6 @@ let velocity;
 let metronome;
 let fps = 5;
 
-let bpm = 120;
-
 // Midi notes
 let notes = [0, 70, 64, 58, 52];
 // Choose from notes 0, 1, 2, ...
@@ -31,8 +29,8 @@ function setup() {
 
   form = new Form(patterns);
 
-//  noLoop();
   metronome = new Metronome(pattern, 120);
+  form.setPattern(pattern);
   metronome.play();
 
   createCanvas(400, 400);
@@ -63,4 +61,5 @@ function draw() {
   else {
     velocity.y = -velocity.y;
   }
+  form.showActive();
 }
