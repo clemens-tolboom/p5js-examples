@@ -24,15 +24,71 @@
       padding: 10px;
       margin: 20px;
     }
+
+    .col {
+      display: inline;
+      border: 1px solid pink;
+    }
+
+    td.beat .first {
+      background-color: lightgrey;
+    }
+    td.beat .second {
+      background-color: lightgrey;
+    }
+    td.beat .third {
+      background-color: lightgrey;
+    }
+
+    td.beat.on.first .first {
+      background-color: lightgreen;
+    }
+    td.beat.on.second .second {
+      background-color: lightgreen;
+    }
+    td.beat.on.third .third {
+      background-color: lightgreen;
+    }
   </style>
 </head>
 
 <body>
   <div id="form">
-    <select id="patterns">
-        <option value="" disabled selected style="display:none;">Label</option>
-    </select>
+    <div class="row">
+      <div class="col">BPM</div>
+      <div class="col">TS</div>
+      <div class="col">Sub DIV.</div>
+    </div>
+    <div class="row">
+      <select id="patterns">
+        <option value="" disabled selected style="display:none;">Pattern</option>
+      </select>
+    </div>
+    <div class="row">
+      <input id="pattern-edit" placeholder="pattern">
+      <table id="beats">
+        <tbody>
+          <tr></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+  </div>
+
+  <template id="beat">
+    <td class="beat">
+      <div class="third">
+        <span>&nbsp;</span>
+      </div>
+      <div class="second third">
+        <span>&nbsp;</span>
+      </div>
+      <div class="first second third">
+        <span>&nbsp;</span>
+      </div>
+    </td>
+  </template>
+
 </body>
 
 </html>

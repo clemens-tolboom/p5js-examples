@@ -7,7 +7,7 @@ let fps = 5;
 let bpm = 120;
 
 // Midi notes
-let notes = [0, 70, 60, 50, 40];
+let notes = [0, 70, 64, 58, 52];
 // Choose from notes 0, 1, 2, ...
 let pattern = '13323';
 let note;
