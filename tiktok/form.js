@@ -1,5 +1,7 @@
 class Form {
-    constructor(patterns) {
+    // getBPM
+    // get/setCustomPatterns
+    constructor(patterns, receiver) {
         this.patterns = patterns;
         console.log('N', patterns.getNominators());
         console.log('D', patterns.getDenominators());
@@ -7,10 +9,11 @@ class Form {
         console.log(patterns.getPatternsByDenominator(denominator));
 
 
+        this.receiver = receiver;
         let that = this;
         let wrapper;
 
-        this.root = createDiv();
+        this.root = this.add(createDiv(), "#form");
 
         // Pattern
         wrapper = this.add(createDiv());
@@ -22,8 +25,9 @@ class Form {
         this.add(createSpan("BPM"), wrapper);
         // min, max, value, step
         this.bpmSlider = this.add(createSlider(10, 300, 120, 1), wrapper);
-        this.bpmSlider.mousePressed(function () {
+        this.bpmSlider.mouseReleased(function () {
             that.bpmInput.value(that.bpmSlider.value());
+            that.receiver("form.bpm", that.bpmSlider.value());
         });
 
         this.bpmInput = this.add(createInput(120), wrapper);
@@ -34,6 +38,7 @@ class Form {
         this.stop = this.add(createButton('Stop'), wrapper);
         this.stop.mousePressed(function () {
             that.stopMetronome();
+            that.receiver("form.stop");
         });
         this.save = this.add(createButton('Change'), wrapper);
         this.save.mousePressed(function () {
@@ -78,11 +83,9 @@ class Form {
                 let el = target.lastElementChild;
                 if (s === "1") {
                     el.className = el.className + " on third";
-                }
-                if (s === "2") {
+                } else if (s === "2") {
                     el.className = el.className + " on second";
-                }
-                if (s === "3") {
+                } else if (s === "3") {
                     el.className = el.className + " on first";
                 }
             });
@@ -100,7 +103,7 @@ class Form {
             console.log(current);
 
             for (let i = 0; i < target.children.length; i++) {
-              target.children[i].className = target.children[i].className.replace(" hit", '');
+                target.children[i].className = target.children[i].className.replace(" hit", '');
             }
             target.children[current].className = target.children[current].className + " hit";
         }

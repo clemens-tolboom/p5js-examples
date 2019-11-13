@@ -2,38 +2,56 @@ let position;
 let velocity;
 
 let metronome;
-let fps = 5;
+let fps = 60
+let bpm = 120;
 
 // Midi notes
 let notes = [0, 70, 64, 58, 52];
 // Choose from notes 0, 1, 2, ...
 let pattern = '13323';
 let note;
-let speed;
 
 let form;
 let patterns;
 let nominator;
 let denominator;
 
+/**
+ * Speed is a bad solution but quick for now.
+ *
+ * Pass the width in bpm/60 seconds per frame step.
+ */
+function speed() {
+  return width * bpm / 60 / fps;
+}
+
 function setup() {
-  speed = width / fps;
+  // create Canvas first as we need it's width for speed
+  createCanvas(400, 400);
 
   position = createVector(width / 2, height / 2);
-  velocity = createVector(speed, 0);
+  velocity = createVector(speed(), 0);
 
   patterns = new Patterns();
 
   nominator = 4;
   denominator = 4;
 
-  form = new Form(patterns);
+  form = new Form(patterns, function (event, value) {
+    console.log(event, value);
+    if (event == "form.bpm") {
+      bpm = value;
+      velocity.x = speed();
+    }
+    else if (event == "form.stop") {
+      velocity.x = 0;
+    }
+  });
 
-  metronome = new Metronome(pattern, 120);
+  metronome = new Metronome(pattern, bpm);
   form.setPattern(pattern);
   metronome.play();
 
-  createCanvas(400, 400);
 }
 
 function draw() {
