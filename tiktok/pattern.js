@@ -7,7 +7,7 @@ class Pattern {
     }
 
     buildPattern() {
-        let permutations = [];
+        this.permutations = [];
         let groups = this.getGroups();
         for (let group of groups) {
             let perms = this.getPerms(group);
